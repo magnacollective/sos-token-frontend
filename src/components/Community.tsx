@@ -1,7 +1,24 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Users, MessageCircle, Heart, Share2, BookOpen, Calendar, MapPin, Video } from 'lucide-react'
+import { Users, MessageCircle, Heart, Share2, BookOpen, Calendar, MapPin, Video, MoreHorizontal, Edit, Trash2, Flag, Reply } from 'lucide-react'
 
 const Community = () => {
+  const [showComments, setShowComments] = useState<{[key: number]: boolean}>({})
+  const [showPostMenu, setShowPostMenu] = useState<{[key: number]: boolean}>({})
+  const [newComment, setNewComment] = useState<{[key: number]: string}>({})
+
+  const toggleComments = (postIndex: number) => {
+    setShowComments(prev => ({ ...prev, [postIndex]: !prev[postIndex] }))
+  }
+
+  const togglePostMenu = (postIndex: number) => {
+    setShowPostMenu(prev => ({ ...prev, [postIndex]: !prev[postIndex] }))
+  }
+
+  const handleCommentChange = (postIndex: number, value: string) => {
+    setNewComment(prev => ({ ...prev, [postIndex]: value }))
+  }
+
   const posts = [
     {
       author: 'Pastor James',
@@ -11,7 +28,11 @@ const Community = () => {
       likes: 234,
       comments: 45,
       shares: 12,
-      verified: true
+      verified: true,
+      commentList: [
+        { author: 'Sarah M.', content: 'This is so inspiring! Thank you for sharing your journey.', time: '1 hour ago' },
+        { author: 'David K.', content: 'Amen! Digital discipline has changed my life too.', time: '45 min ago' },
+      ]
     },
     {
       author: 'Sarah M.',
@@ -21,7 +42,10 @@ const Community = () => {
       likes: 189,
       comments: 32,
       shares: 8,
-      verified: false
+      verified: false,
+      commentList: [
+        { author: 'Pastor James', content: 'Beautiful testimony! Family time is so precious.', time: '3 hours ago' },
+      ]
     },
     {
       author: 'Youth Group Leader',
@@ -31,7 +55,11 @@ const Community = () => {
       likes: 567,
       comments: 89,
       shares: 34,
-      verified: true
+      verified: true,
+      commentList: [
+        { author: 'Parent Leader', content: 'This is exactly what our youth needed! Amazing results.', time: '18 hours ago' },
+        { author: 'Teen Member', content: 'SOS changed my relationship with my phone and God!', time: '12 hours ago' },
+      ]
     },
   ]
 
@@ -100,22 +128,57 @@ const Community = () => {
                         {post.avatar}
                       </div>
                       <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <p className="font-semibold">{post.author}</p>
-                          {post.verified && (
-                            <div className="w-4 h-4 rounded-full bg-sos-blue-500 flex items-center justify-center">
-                              <span className="text-white text-xs">✓</span>
-                            </div>
-                          )}
-                          <span className="text-xs text-white/40">• {post.time}</span>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-2">
+                            <p className="font-semibold">{post.author}</p>
+                            {post.verified && (
+                              <div className="w-4 h-4 rounded-full bg-sos-blue-500 flex items-center justify-center">
+                                <span className="text-white text-xs">✓</span>
+                              </div>
+                            )}
+                            <span className="text-xs text-white/40">• {post.time}</span>
+                          </div>
+                          <div className="relative">
+                            <button
+                              onClick={() => togglePostMenu(index)}
+                              className="p-1 rounded hover:bg-white/10 transition-colors"
+                            >
+                              <MoreHorizontal className="w-4 h-4 text-white/60" />
+                            </button>
+                            {showPostMenu[index] && (
+                              <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="absolute right-0 mt-1 w-40 glass-card rounded-lg border border-white/10 shadow-lg z-10"
+                              >
+                                <div className="p-1">
+                                  <button className="w-full px-3 py-2 text-left rounded hover:bg-white/10 transition-colors flex items-center space-x-2">
+                                    <Edit className="w-3 h-3" />
+                                    <span className="text-sm">Edit</span>
+                                  </button>
+                                  <button className="w-full px-3 py-2 text-left rounded hover:bg-white/10 transition-colors flex items-center space-x-2 text-red-400">
+                                    <Trash2 className="w-3 h-3" />
+                                    <span className="text-sm">Delete</span>
+                                  </button>
+                                  <button className="w-full px-3 py-2 text-left rounded hover:bg-white/10 transition-colors flex items-center space-x-2">
+                                    <Flag className="w-3 h-3" />
+                                    <span className="text-sm">Report</span>
+                                  </button>
+                                </div>
+                              </motion.div>
+                            )}
+                          </div>
                         </div>
                         <p className="text-white/80 mb-4">{post.content}</p>
-                        <div className="flex items-center space-x-6">
+                        <div className="flex items-center space-x-6 mb-4">
                           <button className="flex items-center space-x-2 text-white/60 hover:text-sos-orange-400 transition-colors">
                             <Heart className="w-4 h-4" />
                             <span className="text-sm">{post.likes}</span>
                           </button>
-                          <button className="flex items-center space-x-2 text-white/60 hover:text-sos-blue-400 transition-colors">
+                          <button 
+                            onClick={() => toggleComments(index)}
+                            className="flex items-center space-x-2 text-white/60 hover:text-sos-blue-400 transition-colors"
+                          >
                             <MessageCircle className="w-4 h-4" />
                             <span className="text-sm">{post.comments}</span>
                           </button>
@@ -124,6 +187,56 @@ const Community = () => {
                             <span className="text-sm">{post.shares}</span>
                           </button>
                         </div>
+                        
+                        {/* Comments Section */}
+                        {showComments[index] && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="mt-4 space-y-3"
+                          >
+                            {post.commentList.map((comment, commentIndex) => (
+                              <div key={commentIndex} className="flex items-start space-x-3 bg-white/5 p-3 rounded-lg">
+                                <div className="w-8 h-8 rounded-full bg-sos-blue-500/20 flex items-center justify-center text-sm">
+                                  {comment.author[0]}
+                                </div>
+                                <div className="flex-1">
+                                  <div className="flex items-center space-x-2 mb-1">
+                                    <p className="font-medium text-sm">{comment.author}</p>
+                                    <span className="text-xs text-white/40">{comment.time}</span>
+                                  </div>
+                                  <p className="text-sm text-white/70">{comment.content}</p>
+                                  <button className="mt-1 flex items-center space-x-1 text-xs text-white/50 hover:text-sos-orange-400 transition-colors">
+                                    <Reply className="w-3 h-3" />
+                                    <span>Reply</span>
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                            
+                            {/* Add Comment */}
+                            <div className="flex items-start space-x-3">
+                              <div className="w-8 h-8 rounded-full bg-sos-orange-500/20 flex items-center justify-center text-sm">
+                                Y
+                              </div>
+                              <div className="flex-1">
+                                <textarea
+                                  value={newComment[index] || ''}
+                                  onChange={(e) => handleCommentChange(index, e.target.value)}
+                                  placeholder="Add a comment..."
+                                  className="w-full p-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/40 resize-none focus:outline-none focus:ring-2 focus:ring-sos-orange-500/50"
+                                  rows={2}
+                                />
+                                <div className="flex justify-end mt-2">
+                                  <button className="px-4 py-1 bg-sos-orange-500 rounded-lg text-white text-sm hover:bg-sos-orange-600 transition-colors">
+                                    Comment
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
                       </div>
                     </div>
                   </motion.div>
