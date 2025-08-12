@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Wallet, ArrowUpDown, Download, Upload, Settings, PieChart, Clock, TrendingUp } from 'lucide-react'
-import { LineChart, Line, PieChart as PieChartRecharts, Cell, ResponsiveContainer, Tooltip } from 'recharts'
+import { Wallet, ArrowUpDown, Download, Upload, Settings, TrendingUp } from 'lucide-react'
+import { LineChart, Line, PieChart as PieChartRecharts, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts'
 
 const TokenManager = () => {
   const [walletConnected, setWalletConnected] = useState(false)
@@ -146,19 +146,18 @@ const TokenManager = () => {
                   <div>
                     <ResponsiveContainer width="100%" height={200}>
                       <PieChartRecharts>
-                        <PieChartRecharts
+                        <Pie
                           data={distributionData}
                           cx={100}
                           cy={100}
                           innerRadius={60}
                           outerRadius={90}
-                          paddingAngle={2}
                           dataKey="value"
                         >
                           {distributionData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
-                        </PieChartRecharts>
+                        </Pie>
                         <Tooltip />
                       </PieChartRecharts>
                     </ResponsiveContainer>

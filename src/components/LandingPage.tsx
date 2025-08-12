@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Check, Clock, DollarSign, Smartphone, Users, TrendingUp, Shield, Heart, Download, Apple, Play } from 'lucide-react'
+import { Check, Clock, Smartphone, Users, TrendingUp, Shield, Heart, Download, Apple, Play } from 'lucide-react'
 
 const LandingPage = () => {
   const stats = [

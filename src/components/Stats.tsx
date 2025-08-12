@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Trophy, Target, Flame, Calendar, Award, Star, TrendingUp, Users } from 'lucide-react'
+import { Trophy, Target, Flame, Calendar, Award, Star, TrendingUp } from 'lucide-react'
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
 
 const Analytics = () => {
