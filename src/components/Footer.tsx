@@ -47,7 +47,7 @@ const Footer = () => {
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-sos-orange-500 to-sos-orange-600 flex items-center justify-center">
                 <Cross className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold gradient-text">SOS Token</span>
+              <span className="text-2xl font-bold gradient-text">SOS</span>
             </div>
             <p className="text-white/60 mb-6 max-w-sm">
               Transform your smartphone from a source of distraction into a tool of devotion. 
@@ -128,7 +128,7 @@ const Footer = () => {
         <div className="pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <p className="text-white/40 text-sm mb-4 md:mb-0">
-              © 2024 SOS Token. All rights reserved.
+              © 2024 SOS. All rights reserved.
             </p>
             <div className="flex items-center space-x-4 text-sm">
               <span className="text-white/60">Built on</span>
